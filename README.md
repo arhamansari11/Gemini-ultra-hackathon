@@ -10,21 +10,21 @@
         <tr>
             <td align="center">
                 <a href="https://github.com/arhamansari11">
-                    <img src="" width="100px;" alt="Ahmad Jajja"/>
+                    <img src="https://avatars.githubusercontent.com/u/124850772?v=4" width="100px;" alt="Muhammad Arham"/>
                     <br />
                     <sub><b>Muhammad Arham</b></sub>
                 </a> 
             </td>
             <td align="center">
                 <a href="https://github.com/ThibaultMardinli">
-                    <img src="https://avatars.githubusercontent.com/u/108357959?v=4" width="100px;" alt="Pariphat Sinma"/>
+                    <img src="https://avatars.githubusercontent.com/u/108357959?v=4" width="100px;" alt="Thibault Mardinli"/>
                     <br />
                     <sub><b>Thibault Mardinli</b></sub>
                 </a> 
             </td>
             <td align="center">
           <a href="https://www.linkedin.com/in/olesiazinchenko/">
-                    <img src="https://media.licdn.com/dms/image/D5603AQG0URgkr1fGcA/profile-displayphoto-shrink_200_200/0/1701443603877?e=1716422400&v=beta&t=ZlwQBK2YcsLgpRuGdR0WTb_cQU4HNlq71wv8gKYZgfo" width="100px;" alt="Inam Ul Rehman"/>
+                    <img src="https://media.licdn.com/dms/image/D5603AQG0URgkr1fGcA/profile-displayphoto-shrink_200_200/0/1701443603877?e=1716422400&v=beta&t=ZlwQBK2YcsLgpRuGdR0WTb_cQU4HNlq71wv8gKYZgfo" width="100px;" alt="Olesia Zinchenko"/>
                     <br />
                     <sub><b>Olesia Zinchenko</b></sub>
                 </a> 
@@ -41,13 +41,6 @@
                     <img src="https://avatars.githubusercontent.com/u/122821437?v=4" width="100px;" alt="M.Hassan Gulzar"/>
                     <br />
                     <sub><b>M.Hassan Gulzar</b></sub>
-                </a> 
-            </td>
-          <td align="center">
-                <a href="https://www.linkedin.com/in/faraz-shoaib-55368a19a/">
-                    <img src="https://media.licdn.com/dms/image/D4D03AQG1YwVWmMkliA/profile-displayphoto-shrink_800_800/0/1692440912773?e=1714003200&v=beta&t=xESCKOMkZFfGRQa1_MZgItNYk7BTpmURdxx3TNDn7SQ" width="100px;" alt="Faraz Shoaib "/>
-                    <br />
-                    <sub><b>Faraz Shoaib </b></sub>
                 </a> 
             </td>
         </tr> 
