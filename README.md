@@ -27,7 +27,7 @@
             </td>
           <td align="center">
                 <a href="https://github.com/AR-LABS-CPP">
-                    <img src="https://avatars.githubusercontent.com/u/70814565?v=4" width="100px;" alt="Hassam Aziz"/>
+                    <img src="https://avatars.githubusercontent.com/u/70814565?v=4" width="100px;" alt="Ali Raza"/>
                     <br />
                     <sub><b>Ali Raza</b></sub>
                 </a> 
