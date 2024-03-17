@@ -1,9 +1,6 @@
 # Gemini-ultra-hackathon
 
-[![Contributors][contributors-shield]][contributors-url]
-[![Forks][forks-shield]][forks-url]
-[![Stargazers][stars-shield]][stars-url]
-[![Issues][issues-shield]][issues-url]
+## Our team
 <table>
     <tbody>
         <tr>
