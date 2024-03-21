@@ -1,7 +1,10 @@
-import React from "react";
+import { ImSpinner9 } from "react-icons/im";
 
-const spinner = () => {
-  return <div>spinner</div>;
+const Spinner = () => {
+  const classes = ` loading-spinner `
+  return <>
+    <ImSpinner9 className={classes} />
+  </>;
 };
 
-export default spinner;
+export default Spinner;

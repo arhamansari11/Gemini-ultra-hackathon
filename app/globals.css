@@ -155,39 +155,3 @@ input {
 }
 
 /* MEDIA QUERY */
-
-@media screen and (min-width: 1534px) and (max-width: 1636px) {
-  .sideBar {
-    width: 25vw !important;
-  }
-  .main-gpt {
-    width: 75vw !important;
-  }
-}
-
-@media screen and (min-width: 1364px) and (max-width: 1534px) {
-  .sideBar {
-    width: 28vw !important;
-  }
-  .main-gpt {
-    width: 72vw !important;
-  }
-}
-
-@media screen and (min-width: 1259px) and (max-width: 1364px) {
-  .sideBar {
-    width: 30vw !important;
-  }
-  .main-gpt {
-    width: 70vw !important;
-  }
-}
-
-@media screen and (min-width: 1024px) and (max-width: 1259px) {
-  .sideBar {
-    width: 35vw !important;
-  }
-  .main-gpt {
-    width: 65vw !important;
-  }
-}

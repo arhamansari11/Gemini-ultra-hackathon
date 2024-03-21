@@ -3,12 +3,12 @@
 import { useState } from "react";
 import { IoMdAttach } from "react-icons/io";
 import { ThreeDots } from "react-loader-spinner";
-import Spinner from "../../Components/loader/Spinner";
-import cogwheel from "../../Assets/ICONS/ICON_ECOFACTOR.svg";
-import BOX from "../../Assets/ICONS/4 BOXES_CHATGPT4.svg";
+import Spinner from "../components/loader/spinner";
+import Image from "next/image";
+import AiProfile from "../Assets/images/Google-Gemini-AI-Icon.png";
+import userProfile from "../Assets/images/user.jpg";
 
 export default function Home() {
-  const [collapsed, setCollapsed] = useState(false);
   const [loading, setLoading] = useState(false);
   const [prompt, setPrompt] = useState("");
   const [promptsArr, setPromptsArr] = useState([]);
@@ -61,25 +61,10 @@ export default function Home() {
       <main
         className="main-gpt"
         style={{
-          width: collapsed ? "100vw" : "77vw",
+          width: "100vw",
           backgroundColor: "#2f3135",
         }}
       >
-        <div
-          onClick={() => setCollapsed(!collapsed)}
-          style={{ cursor: "pointer", color: "#c1c1c1" }}
-        >
-          <span
-            className={`big-icon ${collapsed ? "rotate-left" : "rotate-right"}`}
-            style={{
-              ...iconStyles,
-              color: "#ccc",
-              marginLeft: collapsed ? "-3px" : "-10px",
-            }}
-          >
-            {collapsed ? <>&#187;</> : <>&#171;</>}
-          </span>
-        </div>
         <div
           className="container-fluid d-flex justify-content-center align-items-center"
           style={{ height: "100vh" }}
@@ -95,55 +80,14 @@ export default function Home() {
                 height: "15%",
                 borderTopLeftRadius: "25px",
                 borderTopRightRadius: "25px",
+                justifyContent: "center",
+                alignItems: "center",
+                display: "flex",
               }}
             >
-              <div className="col">
-                <div className="row">
-                  <div className="col-6 col-xl-5 ms-3 mt-4">
-                    {/* <h2  className='pt-4'>ChatGPT 4</h2> */}
-                    <select
-                      style={{
-                        ...textStyle,
-                        backgroundColor: "#c1c1c1",
-                        border: "none",
-                        fontSize: "24px",
-                      }}
-                      className="form-select"
-                      aria-label="Default select example"
-                    >
-                      <option selected>
-                        <h1>
-                          <b>ChatGPT 4</b>
-                        </h1>
-                      </option>
-                      <option value="1">One</option>
-                      <option value="2">Two</option>
-                      <option value="3">Three</option>
-                    </select>
-                  </div>
-                  <div className="col-7"></div>
-                </div>
-              </div>
-              <div className="col">
-                <div className="pt-4">
-                  <div className="row">
-                    <div className="col-3"></div>
-                    <div className="col-8">
-                      <select
-                        className="form-select"
-                        style={{ cursor: "pointer" }}
-                        aria-label="Default select example"
-                      >
-                        <option selected>Select product to optimize</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
-                      </select>
-                    </div>
-                    <div className="col-1"></div>
-                  </div>
-                </div>
-              </div>
+              <h1 className="mx-auto text-center">
+                Efa (Event Feedback Analysis)
+              </h1>
             </div>
 
             {promptsArr.length === 0 && (
@@ -155,14 +99,6 @@ export default function Home() {
                   className="col d-flex flex-column gap-3 justify-content-center align-items-center"
                   style={{ margin: "0 auto", maxWidth: "800px" }}
                 >
-                  <div>
-                    <img
-                      src={cogwheel}
-                      className="rounded circle "
-                      style={{ width: "40px" }}
-                      alt="cogwheel"
-                    />
-                  </div>
                   <h3 className="heading3">&nbsp; How can I help you today?</h3>
                   <p className="main-text " style={{ textAlignLast: "center" }}>
                     &nbsp; &nbsp;Convenient access to all ChatGPT4 potential, in
@@ -171,12 +107,6 @@ export default function Home() {
                     directly from ECOFACTOR app, without the need to signup to
                     ChatGPT Plus account.
                   </p>
-                  <img
-                    src={BOX}
-                    alt="P-box"
-                    className=""
-                    style={{ maxWidth: "650px" }}
-                  />
                 </div>
               </div>
             )}
@@ -204,8 +134,8 @@ export default function Home() {
                                 alignItems: "center",
                               }}
                             >
-                              <img
-                                src="https://camo.githubusercontent.com/1e6de73a5a5d1800c3f18f294e4b019466d6daa7ac4ddbe713afc5e3ac062547/68747470733a2f2f6d656469612e6c6963646e2e636f6d2f646d732f696d6167652f4434443033415148556d6b357863444d6574412f70726f66696c652d646973706c617970686f746f2d736872696e6b5f3430305f3430302f302f313639333430353830343034313f653d3137313532313238303026763d6265746126743d307a4b74676b73684967694439786d6e456a425a7158755731343547774e5676386f6d3958576b424f7259"
+                              <Image
+                                src={userProfile}
                                 className="rounded-circle mb-auto ms-auto "
                                 style={profileUserStyle}
                                 alt=""
@@ -225,7 +155,7 @@ export default function Home() {
                               }}
                             >
                               <img
-                                src={chatgptLogo}
+                                src={AiProfile}
                                 className="rounded-circle mb-auto me-2"
                                 style={profileStyle}
                                 alt=""
@@ -304,21 +234,6 @@ export default function Home() {
                         borderRadius: "20px",
                       }}
                     >
-                      <button
-                        className="input-group-text"
-                        id="basic-addon1"
-                        style={{
-                          fontSize: "1.8rem",
-                          backgroundColor: "white",
-                          borderTopLeftRadius: "20px",
-                          borderBottomLeftRadius: "20px",
-                          color: "#494c51",
-                          border: "none",
-                          borderRight: "none",
-                        }}
-                      >
-                        <IoMdAttach />
-                      </button>
                       <input
                         value={prompt}
                         onChange={(e) => setPrompt(e.target.value)}
