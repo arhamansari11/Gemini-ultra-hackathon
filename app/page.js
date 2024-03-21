@@ -101,11 +101,7 @@ export default function Home() {
                 >
                   <h3 className="heading3">&nbsp; How can I help you today?</h3>
                   <p className="main-text " style={{ textAlignLast: "center" }}>
-                    &nbsp; &nbsp;Convenient access to all ChatGPT4 potential, in
-                    one simple and easy place, which means that the PRO and
-                    ENTERPRISE paid members will be able to access chatgpt4
-                    directly from ECOFACTOR app, without the need to signup to
-                    ChatGPT Plus account.
+                    &nbsp; &nbsp;Efa (Event Feedback Analysis) aims to revolutionize the way event feedback is collected and analyzed. Traditional methods of gathering feedback, such as filling out forms at the end of an event, can be cumbersome for attendees and challenging for event organizers to manage effectively at scale.
                   </p>
                 </div>
               </div>
@@ -239,7 +235,7 @@ export default function Home() {
                         onChange={(e) => setPrompt(e.target.value)}
                         type="text"
                         className="form-control "
-                        placeholder="Please type or say what kind of optimizations you are looking for ?"
+                        placeholder="Please type or say what type of event you want ?"
                         aria-label="Username"
                         aria-describedby="basic-addon1"
                       />

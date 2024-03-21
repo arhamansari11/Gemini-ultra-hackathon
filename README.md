@@ -1,36 +1,60 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Efa (Event Feedback Analysis)
 
-## Getting Started
+## Project Brief
 
-First, run the development server:
+💡 **"How was your Event"**
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+**Capture feedbacks from a large group of attendees and run sentiment analysis on it to provide an event organizer accurate feedbacks. (more details coming)**
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+**Problem:**
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+- For attendees filling a form at the end of an event is a pain
+- For events business owners collecting feedbacks at large scale from guests to improve their operation is impossible.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+**Solution:**
 
-## Learn More
+**Efa** (Event Feedback Analysis)
 
-To learn more about Next.js, take a look at the following resources:
+Interactive feedback questionnaire with gamification.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Overview
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+Efa aims to revolutionize the way event feedback is collected and analyzed. Traditional methods of gathering feedback, such as filling out forms at the end of an event, can be cumbersome for attendees and challenging for event organizers to manage effectively at scale.
 
-## Deploy on Vercel
+Efa provides an innovative solution by offering an interactive feedback questionnaire with gamification elements. Attendees can provide feedback in a more engaging and enjoyable manner, leading to higher participation rates and more accurate insights for event organizers.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+**Tech Stack:**
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+👾 **What’s the Tech**
+
+1. React.js [FRONTEND]
+2. Tailwind CSS [Styling]
+3. Express.js [BACKEND]
+4. Gemini [CHAT BOT]
+5. Telegram API [COMMUNICATION]
+
+Key Features:
+- Interactive feedback questionnaire: Engage attendees with a user-friendly and interactive feedback form.
+- Gamification elements: Incorporate gamification elements to incentivize participation and enhance the user experience.
+- Sentiment analysis: Utilize sentiment analysis techniques to analyze feedback and provide event organizers with accurate insights into attendee sentiment.
+- Scalable solution: Enable event organizers to collect and analyze feedback from large groups of attendees efficiently.
+
+By leveraging Efa, event organizers can gain valuable insights into attendee experiences, identify areas for improvement, and enhance the overall success of their events.
+
+## The Squad
+
+👥 **The Squad:**
+
+- [Olesia Zinchenko](https://www.linkedin.com/in/olesiazinchenko/): The Style Girl 😎
+- [Ali RAZA](https://www.linkedin.com/in/ali-raza-147785267/): The AI Guy 🤖
+- [Muhammad ARHAM](https://www.linkedin.com/in/arhamansari12/): The MERN Guy 👾
+- [Hassan GULZAR](https://www.linkedin.com/in/hassan-gulzar-256292267/): The MERN Guy 👾
+- [Thibault Mardinli](https://www.linkedin.com/in/eventsandai/): The Biz Guy 💡
+
+## Installation
+
+To install Efa, follow these steps:
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/your_username/efa.git
