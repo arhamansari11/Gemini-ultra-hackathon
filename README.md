@@ -25,7 +25,7 @@ Efa provides an innovative solution by offering an interactive feedback question
 
 **Tech Stack:**
 
-👾 **What’s the Tech**
+**What’s the Tech**
 
 1. React.js [FRONTEND]
 2. Tailwind CSS [Styling]
