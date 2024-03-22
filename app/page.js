@@ -56,7 +56,11 @@ export default function Home() {
   return (
     <div
       id="productOptimization"
-      style={{ display: "flex", height: "100vh", minHeight: "400px" }}
+      style={{
+        display: "flex",
+        height: "100vh",
+        minHeight: "400px",
+      }}
     >
       <main
         className="main-gpt"
@@ -67,7 +71,7 @@ export default function Home() {
       >
         <div
           className="container-fluid d-flex justify-content-center align-items-center"
-          style={{ height: "100vh" }}
+          style={{ height: "100vh", margin: "auto 0" }}
         >
           <div
             className="container"
@@ -76,8 +80,8 @@ export default function Home() {
             <div
               className="row"
               style={{
-                backgroundColor: "#c1c1c1",
-                height: "15%",
+                backgroundColor: "#0F171F",
+                height: "10%",
                 borderTopLeftRadius: "25px",
                 borderTopRightRadius: "25px",
                 justifyContent: "center",
@@ -85,23 +89,36 @@ export default function Home() {
                 display: "flex",
               }}
             >
-              <h1 className="mx-auto text-center">
-                Efa (Event Feedback Analysis)
-              </h1>
+              <div className="flex">
+                <div>
+                  <h5 className="m-0 p-0 text-white">
+                    Efa (Event Feedback Analysis)
+                  </h5>
+                  <p className=" p-0 text-white">@AJINKYA3D</p>
+                </div>
+              </div>
             </div>
 
             {promptsArr.length === 0 && (
               <div
                 className="row"
-                style={{ backgroundColor: "#e6e6e6", height: "70%" }}
+                style={{ backgroundColor: "#0D1728", height: "70%" }}
               >
                 <div
                   className="col d-flex flex-column gap-3 justify-content-center align-items-center"
                   style={{ margin: "0 auto", maxWidth: "800px" }}
                 >
                   <h3 className="heading3">&nbsp; How can I help you today?</h3>
-                  <p className="main-text " style={{ textAlignLast: "center" }}>
-                    &nbsp; &nbsp;Efa (Event Feedback Analysis) aims to revolutionize the way event feedback is collected and analyzed. Traditional methods of gathering feedback, such as filling out forms at the end of an event, can be cumbersome for attendees and challenging for event organizers to manage effectively at scale.
+                  <p
+                    className="main-text text-white"
+                    style={{ textAlignLast: "center" }}
+                  >
+                    &nbsp; &nbsp;Efa (Event Feedback Analysis) aims to
+                    revolutionize the way event feedback is collected and
+                    analyzed. Traditional methods of gathering feedback, such as
+                    filling out forms at the end of an event, can be cumbersome
+                    for attendees and challenging for event organizers to manage
+                    effectively at scale.
                   </p>
                 </div>
               </div>
@@ -111,12 +128,12 @@ export default function Home() {
             {promptsArr.length !== 0 && (
               <div
                 className="prompt-scroll-box row "
-                style={{ backgroundColor: "#e6e6e6", height: "70%" }}
+                style={{ backgroundColor: "#0D1728", height: "70%" }}
               >
-                <div className="scroll-inner ">
+                <div className="scroll-inner">
                   <div
-                    className=" row prompts px-5 pt-4"
-                    style={{ backgroundColor: "#e6e6e6", height: "70%" }}
+                    className="row prompts px-5 pt-4"
+                    style={{ backgroundColor: "#0D1728", height: "70%" }}
                   >
                     <div className="container-fluid">
                       {promptsArr.map((prom, index) => (
@@ -206,62 +223,39 @@ export default function Home() {
             <div
               className="row"
               style={{
-                backgroundColor: "#e6e6e6",
-                height: "15%",
+                backgroundColor: "#090F1A",
+                height: "8%",
                 borderBottomLeftRadius: "25px",
                 borderBottomRightRadius: "25px",
               }}
             >
-              <div
-                className="col "
-                style={{
-                  backgroundColor: "#e6e6e6",
-                  borderBottomLeftRadius: "25px",
-                  borderBottomRightRadius: "25px",
-                }}
-              >
-                <div className="row">
-                  <div className="col"></div>
-                  <div className="col-11 ">
-                    <div
-                      className="input-group mb-3"
-                      style={{
-                        border: "1px black solid",
-                        borderRadius: "20px",
-                      }}
-                    >
-                      <input
-                        value={prompt}
-                        onChange={(e) => setPrompt(e.target.value)}
-                        type="text"
-                        className="form-control "
-                        placeholder="Please type or say what type of event you want ?"
-                        aria-label="Username"
-                        aria-describedby="basic-addon1"
-                      />
-                      <span
-                        className="input-group-text"
-                        id="basic-addon1"
-                        style={{
-                          backgroundColor: "white",
-                          borderTopRightRadius: "20px",
-                          borderBottomRightRadius: "20px",
-                        }}
-                      >
-                        <button
-                          onClick={handleSubmit}
-                          className="btn btnGradient"
-                          style={{ backgroundColor: "#0076c3" }}
-                        >
-                          {loading ? <Spinner /> : "Submit"}
-                        </button>
-                      </span>
-                    </div>
-                    {error && <p className="text-danger">{error}</p>}
-                  </div>
-                  <div className="col"></div>
-                </div>
+              <div className="input-group">
+                <input
+                  value={prompt}
+                  style={{
+                    backgroundColor: "#090F1A",
+                    border: "none",
+                    color: "white",
+                  }}
+                  onChange={(e) => setPrompt(e.target.value)}
+                  type="text"
+                  className="form-control"
+                  placeholder="Type message here..."
+                  aria-label="Username"
+                  aria-describedby="basic-addon1"
+                />
+
+                <button
+                  onClick={handleSubmit}
+                  className="btn"
+                  disabled={loading}
+                  style={{ backgroundColor: "#0076c3", color: "white" }}
+                >
+                  {loading ? <Spinner /> : "Send"}
+                </button>
               </div>
+
+              {/* {error && <p className="text-danger">{error}</p>} */}
             </div>
           </div>
         </div>

@@ -17,9 +17,6 @@
   border-radius: 10px;
 }
 
-#productOptimization {
-  background-color: "#2f3135" !important;
-}
 .icon-container {
   cursor: pointer;
 }
@@ -30,6 +27,10 @@
 
 .rotate-right {
   transform: rotate(0deg);
+}
+
+input[type="text"]::placeholder {
+  color: white;
 }
 .heading3 {
   background: linear-gradient(
@@ -119,7 +120,6 @@ input {
 .sideBar-scroll {
   display: flex;
   flex-direction: column;
-  /* justify-content: space-between; */
 }
 .bottom-user {
   margin-top: auto !important;
@@ -153,5 +153,3 @@ input {
     transform: rotate(360deg);
   }
 }
-
-/* MEDIA QUERY */
