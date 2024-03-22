@@ -43,7 +43,7 @@ By leveraging Efa, event organizers can gain valuable insights into attendee exp
 
 ## The Squad
 
-👥 **The Squad:**
+👥 **Our Team:**
 
 - [Olesia Zinchenko](https://www.linkedin.com/in/olesiazinchenko/): The Style Girl 😎
 - [Ali RAZA](https://www.linkedin.com/in/ali-raza-147785267/): The AI Guy 🤖
