@@ -5,7 +5,7 @@ import { IoMdAttach } from "react-icons/io";
 import { ThreeDots } from "react-loader-spinner";
 import Spinner from "../components/loader/spinner";
 import Image from "next/image";
-import AiProfile from "../Assets/images/Google-Gemini-AI-Icon.png";
+import AiProfile from "../Assets/images/aiLogo.png";
 import userProfile from "../Assets/images/user.jpg";
 
 export default function Home() {
@@ -76,8 +76,11 @@ export default function Home() {
           <div
             className="container"
             style={{
-              height: "96vh", display: "flex", flexDirection: "column" ,
-              border: "2px solid blue" , borderRadius : "25px"
+              height: "96vh",
+              display: "flex",
+              flexDirection: "column",
+              border: "2px solid blue",
+              borderRadius: "25px",
             }}
           >
             <div
