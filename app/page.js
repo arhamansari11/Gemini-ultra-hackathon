@@ -71,17 +71,20 @@ export default function Home() {
       >
         <div
           className="container-fluid d-flex justify-content-center align-items-center"
-          style={{ height: "100vh", margin: "auto 0" }}
+          style={{ height: "100vh", margin: "auto 0", border: "20px" }}
         >
           <div
             className="container"
-            style={{ height: "96vh", display: "flex", flexDirection: "column" }}
+            style={{
+              height: "96vh", display: "flex", flexDirection: "column" ,
+              border: "2px solid blue" , borderRadius : "25px"
+            }}
           >
             <div
               className="row"
               style={{
                 backgroundColor: "#0F171F",
-                height: "10%",
+                height: "15%",
                 borderTopLeftRadius: "25px",
                 borderTopRightRadius: "25px",
                 justifyContent: "center",
@@ -89,7 +92,7 @@ export default function Home() {
                 display: "flex",
               }}
             >
-              <div className="flex">
+              <div className="flex ms-5 mt-4">
                 <div>
                   <h5 className="m-0 p-0 text-white">
                     Efa (Event Feedback Analysis)
@@ -102,7 +105,7 @@ export default function Home() {
             {promptsArr.length === 0 && (
               <div
                 className="row"
-                style={{ backgroundColor: "#0D1728", height: "70%" }}
+                style={{ backgroundColor: "#0D1728", height: "78%" }}
               >
                 <div
                   className="col d-flex flex-column gap-3 justify-content-center align-items-center"
@@ -127,8 +130,8 @@ export default function Home() {
             {/* show prompts */}
             {promptsArr.length !== 0 && (
               <div
-                className="prompt-scroll-box row "
-                style={{ backgroundColor: "#0D1728", height: "70%" }}
+                className="prompt-scroll-box row d-flex justify-content-center"
+                style={{ backgroundColor: "#0D1728", height: "78%" }}
               >
                 <div className="scroll-inner">
                   <div
