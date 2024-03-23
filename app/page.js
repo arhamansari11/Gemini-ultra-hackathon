@@ -77,7 +77,7 @@ export default function Home() {
             className="container"
             style={{
               height: "96vh", display: "flex", flexDirection: "column" ,
-              border: "2px solid blue" , borderRadius : "25px"
+              border: "1px solid white" , borderRadius : "25px"
             }}
           >
             <div
@@ -291,3 +291,6 @@ const profileUserStyle = {
   padding: "7px",
   marginTop: "-5px",
 };
+const btn = {
+
+}
