@@ -1,6 +1,5 @@
 "use client";
 import { useState, useEffect } from "react";
-import { IoMdAttach } from "react-icons/io";
 import { ThreeDots } from "react-loader-spinner";
 import Spinner from "../components/loader/spinner";
 import Image from "next/image";
@@ -13,72 +12,28 @@ const promptsArray = [
   "Enter Your event goal",
 ];
 
+const eventsDetail = {
+  eventName: "",
+  eventDescription: "",
+  formGoal: "",
+};
+
 export default function Home() {
   const [loading, setLoading] = useState(false);
   const [prompt, setPrompt] = useState("");
   const [promptsArr, setPromptsArr] = useState([]);
-
-  const [eventsDetail, setEventsDetail] = useState({
-    eventName: "",
-    eventDesc: "",
-    formGoal: "",
-  });
-
-  //! if User not exist
-  const creatingNewUser = (e) => {
-    if (userName == null) {
-      setPromptsArr([...promptsArr, "Enter your name"]);
-    } else {
-      setPromptsArr([...promptsArr, e.target.value]);
-    }
-  };
-  //! if user exist but event detail not available
-  //   const getEventDetails = () => {
-  //     if (eventsDetail.eventName == "") {
-  //       setPromptsArr([...promptsArr, "Enter Your Event Name"]);
-  //     } else if (
-  //       eventsDetail.eventName != "" &&
-  //       eventsDetail.eventDescription == ""
-  //     ) {
-  //       setPromptsArr([...promptsArr, "Enter Your Event Description"]);
-  //     } else {
-  //       setPromptsArr([...promptsArr, "Enter Your Form goal"]);
-  //     }
-  //
-  //     if (
-  //       eventsDetail.eventName != "" &&
-  //       eventsDetail.eventDescription != "" &&
-  //       eventsDetail.formGoal != ""
-  //     ) {
-  //       const myHeaders = new Headers();
-  //       myHeaders.append("Content-Type", "application/json");
-  //
-  //       const raw = JSON.stringify(eventsDetail);
-  //       const requestOptions = {
-  //         method: "POST",
-  //         headers: myHeaders,
-  //         body: raw,
-  //         redirect: "follow",
-  //       };
-  //       fetch(
-  //         "https://gemini-ai-hackathon-efa-backend.onrender.com/organizers/events/new",
-  //         requestOptions
-  //       )
-  //         .then((response) => response.text())
-  //         .then((result) => console.log(result))
-  //         .catch((error) => console.error(error));
-  //     }
-  //   };
-
-  //! if user already Exists.
-  //   const userExistOrNot = () => {
-  //     let id1 = localStorage.getItem("id1");
-  //     let id2 = localStorage.getItem("id2");
-  //   };
+  const [reRender, setRerender] = useState(false);
 
   const myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");
 
+  let raw;
+  const requestOptions = {
+    method: "POST",
+    headers: myHeaders,
+    body: raw,
+    redirect: "follow",
+  };
   async function postData(url, options) {
     try {
       const response = await fetch(url, options);
@@ -97,81 +52,94 @@ export default function Home() {
     if (id1 === null) {
       setPromptsArr([...promptsArr, prompt]);
       setPrompt("");
-      const raw = JSON.stringify({
+      raw = JSON.stringify({
         userName: prompt,
       });
-      const requestOptions = {
-        method: "POST",
-        headers: myHeaders,
-        body: raw,
-        redirect: "follow",
-      };
 
       let res = await postData(
         "https://gemini-ai-hackathon-efa-backend.onrender.com/users/",
         requestOptions
       );
 
-      console.log(res);
-    } else if (id1 != null && id2 === null) {
+      let id = JSON.parse(res);
+      localStorage.setItem("id1", id.id);
+      setRerender((prevState) => !prevState);
+    } else if (id1 !== null && id2 === null) {
       setPromptsArr([...promptsArr, prompt]);
-      setPrompt("");
-      setEventsDetail([]);
-    }
 
-    // e.preventDefault();
-    //     if (prompt.trim() !== "") {
-    //       console.log("prompt -> ", prompt);
-    //       setPromptsArr([...promptsArr, prompt]);
-    //       const postData = {
-    //         query:
-    //           prompt +
-    //           "? Give me response in JSON & there should be 1 key named response",
-    //       };
-    //       setPrompt("");
-    //
-    //       setLoading(true);
-    //       // API Calling and getting response code
-    //
-    //       try {
-    //         // Make a POST request using axios
-    //         const response = fetch(
-    //           "https://ecofactory.onrender.com/api/eco_fac_gpt",
-    //           postData
-    //         );
-    //
-    //         console.log("response.data -> ", response.data);
-    //         setRecentAnswer(response.data.response);
-    //         setPromptsArr((prevPromptsArr) => [
-    //           ...prevPromptsArr,
-    //           response?.data?.response,
-    //         ]);
-    //         setLoading(false);
-    //         setError(null); // Reset error state
-    //       } catch (error) {
-    //         // Handle errors
-    //         console.error("Error fetching data: ", error);
-    //         setError(error.message); // Store error message in state
-    //         setLoading(false);
-    //       }
-    //     }
+      if (eventsDetail.eventName === "") {
+        eventsDetail.eventName = prompt;
+      } else if (
+        eventsDetail.eventName !== "" &&
+        eventsDetail.eventDescription === "" &&
+        eventsDetail.formGoal === ""
+      ) {
+        eventsDetail.eventDescription = prompt;
+      } else {
+        eventsDetail.formGoal = prompt;
+      }
+
+      setRerender((prevState) => !prevState);
+      setPrompt("");
+    } else {
+      setPromptsArr([...promptsArr, prompt]);
+      mainPrompt();
+      setPrompt("");
+    }
+  };
+
+  const mainPrompt = async () => {
+    raw = JSON.stringify({ prompt: prompt });
+    let id1 = localStorage.getItem("id1");
+    let id2 = localStorage.getItem("id2");
+
+    try {
+      let res = await postData(
+        `https://gemini-ai-hackathon-efa-backend.onrender.com/organizers/${id1}/events/:${id2}/conversate`,
+        requestOptions
+      );
+
+      console.log(res);
+    } catch (error) {}
+  };
+  const getId2 = async () => {
+    raw = JSON.stringify(eventsDetail);
+
+    let res = await postData(
+      "https://gemini-ai-hackathon-efa-backend.onrender.com/users/",
+      requestOptions
+    );
+    let id = JSON.parse(res);
+    localStorage.setItem("id2", id.id);
+    mainPrompt();
   };
 
   useEffect(() => {
     let id1 = localStorage.getItem("id1");
     let id2 = localStorage.getItem("id2");
 
-    localStorage.setItem("id1", "hassan");
-
     if (id1 === null) {
       setPromptsArr([...promptsArr, "Enter Your Name"]);
     } else if (id1 != null && id2 === null) {
+      if (
+        eventsDetail.eventName !== "" &&
+        eventsDetail.eventDescription !== "" &&
+        eventsDetail.formGoal !== ""
+      ) {
+        getId2();
+        return;
+      }
+
       let particularPrompt =
-        eventsDetail.eventName == "" ? 0 : eventsDetail.eventDesc == "" ? 1 : 2;
+        eventsDetail.eventName == ""
+          ? 0
+          : eventsDetail.eventDescription == ""
+          ? 1
+          : 2;
 
       setPromptsArr([...promptsArr, promptsArray[particularPrompt]]);
     }
-  }, []);
+  }, [reRender]);
 
   return (
     <div
