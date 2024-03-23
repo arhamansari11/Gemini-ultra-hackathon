@@ -24,9 +24,9 @@ export default function Home() {
   const [promptsArr, setPromptsArr] = useState([]);
   const [reRender, setRerender] = useState(false);
 
+  //! Blue print for api
   const myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");
-
   let raw;
   const requestOptions = {
     method: "POST",
@@ -44,6 +44,7 @@ export default function Home() {
     }
   }
 
+  //! Submit Handler
   const handleSubmit = async (e) => {
     e.preventDefault();
     let id1 = localStorage.getItem("id1");
@@ -88,6 +89,7 @@ export default function Home() {
     }
   };
 
+  //!For prompting
   const mainPrompt = async () => {
     raw = JSON.stringify({ prompt: prompt });
     let id1 = localStorage.getItem("id1");
@@ -102,6 +104,8 @@ export default function Home() {
       console.log(res);
     } catch (error) {}
   };
+
+  //! To get Event id
   const getId2 = async () => {
     raw = JSON.stringify(eventsDetail);
 
@@ -114,6 +118,7 @@ export default function Home() {
     mainPrompt();
   };
 
+  //! Rerender the page
   useEffect(() => {
     let id1 = localStorage.getItem("id1");
     let id2 = localStorage.getItem("id2");
@@ -138,6 +143,9 @@ export default function Home() {
           : 2;
 
       setPromptsArr([...promptsArr, promptsArray[particularPrompt]]);
+    } else {
+      mainPrompt();
+      return;
     }
   }, [reRender]);
 
