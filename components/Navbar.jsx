@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 const Navbar = () => {
   const pathname = usePathname();
   return (
-    <header className="container-fluid d-flex flex-column flex-md-row justify-content-md-around py-2">
+    <header className="container-fluid d-flex flex-column flex-md-row justify-content-md-around py-3">
       <div id="logo" className="text-center">
         <p className="my-auto">EFA(Events Feedback Analysis)</p>
       </div>

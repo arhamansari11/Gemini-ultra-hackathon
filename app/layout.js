@@ -1,10 +1,14 @@
-import { Inter } from "next/font/google";
-import { Poppins } from "next/font/google";
+import { Inter, Poppins } from "next/font/google";
 
 import "./globals.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Navbar from "@/components/Navbar";
-const inter = Inter({ subsets: ["latin"] });
+
+const poppins = Poppins({
+  weight: "400",
+  subsets: ["devanagari"],
+  variable: "--font-poppins",
+});
 
 export const metadata = {
   title: "EFA(Event Feedback Analysis)",
@@ -14,7 +18,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={poppins.variable}>
         <Navbar />
         {children}
       </body>

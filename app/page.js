@@ -101,7 +101,9 @@ export default function Home() {
     const userPrompt = { text: prompt, role: "user" };
 
     // Add user's prompt to the state
-    setPromptsArr([...promptsArr, userPrompt]);
+    setPromptsArr((prevState) => {
+      return [...prevState, userPrompt];
+    });
 
     // Clear the prompt input
     setPrompt("");
@@ -124,10 +126,11 @@ export default function Home() {
       );
 
       let promptResponse = JSON.parse(res);
-      setPromptsArr([
-        ...promptsArr,
-        { text: promptResponse.response, role: "ai" },
-      ]);
+      console.log(promptResponse);
+
+      setPromptsArr((prevState) => {
+        return [...prevState, { text: promptResponse.response, role: "ai" }];
+      });
     } catch (error) {
     } finally {
       setLoading(false);
@@ -246,10 +249,18 @@ export default function Home() {
                   className="col d-flex flex-column gap-3 justify-content-center align-items-center"
                   style={{ margin: "0 auto", maxWidth: "800px" }}
                 >
-                  <h3 className="heading3">&nbsp; How can I help you today?</h3>
+                  <h3
+                    style={{ fontFamily: "var(--font-poppins)" }}
+                    className="heading3"
+                  >
+                    &nbsp; How can I help you today?
+                  </h3>
                   <p
                     className="main-text text-white"
-                    style={{ textAlignLast: "center" }}
+                    style={{
+                      textAlignLast: "center",
+                      fontFamily: "var(--font-poppins)",
+                    }}
                   >
                     &nbsp; &nbsp;Efa (Event Feedback Analysis) aims to
                     revolutionize the way event feedback is collected and
