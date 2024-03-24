@@ -23,17 +23,11 @@ export default function Home() {
   const [prompt, setPrompt] = useState("");
   const [promptsArr, setPromptsArr] = useState([]);
   const [reRender, setRerender] = useState(false);
-
+  const [error, setError] = useState("");
   //! Blue print for api
   const myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");
-  let raw;
-  const requestOptions = {
-    method: "POST",
-    headers: myHeaders,
-    body: raw,
-    redirect: "follow",
-  };
+
   async function postData(url, options) {
     try {
       const response = await fetch(url, options);
@@ -53,18 +47,31 @@ export default function Home() {
     if (id1 === null) {
       setPromptsArr([...promptsArr, prompt]);
       setPrompt("");
-      raw = JSON.stringify({
-        userName: prompt,
-      });
 
-      let res = await postData(
-        "https://gemini-ai-hackathon-efa-backend.onrender.com/users/",
-        requestOptions
-      );
+      try {
+        setLoading(true);
+        const raw = JSON.stringify({
+          username: prompt,
+        });
+        const requestOptions = {
+          method: "POST",
+          headers: myHeaders,
+          body: raw,
+          redirect: "follow",
+        };
 
-      let id = JSON.parse(res);
-      localStorage.setItem("id1", id.id);
-      setRerender((prevState) => !prevState);
+        let res = await postData(
+          "https://gemini-ai-hackathon-efa-backend.onrender.com/users/",
+          requestOptions
+        );
+        let id = JSON.parse(res);
+        localStorage.setItem("id1", id.id);
+        setRerender((prevState) => !prevState);
+      } catch (error) {
+        setError(error);
+      } finally {
+        setLoading(false);
+      }
     } else if (id1 !== null && id2 === null) {
       setPromptsArr([...promptsArr, prompt]);
 
@@ -83,38 +90,55 @@ export default function Home() {
       setRerender((prevState) => !prevState);
       setPrompt("");
     } else {
-      setPromptsArr([...promptsArr, prompt]);
       mainPrompt();
-      setPrompt("");
     }
   };
 
   //!For prompting
   const mainPrompt = async () => {
-    raw = JSON.stringify({ prompt: prompt });
+    const raw = JSON.stringify({ prompt: prompt });
+    const requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+    };
     let id1 = localStorage.getItem("id1");
     let id2 = localStorage.getItem("id2");
 
     try {
+      setPromptsArr([...promptsArr, prompt]);
+      setPrompt("");
+      setLoading(true);
       let res = await postData(
-        `https://gemini-ai-hackathon-efa-backend.onrender.com/organizers/${id1}/events/:${id2}/conversate`,
+        `https://gemini-ai-hackathon-efa-backend.onrender.com/organizers/${id1}/events/${id2}/conversate`,
         requestOptions
       );
 
-      console.log(res);
-    } catch (error) {}
-  };
+      let promptResponse = JSON.parse(res);
 
+      setPromptsArr([...promptsArr, promptResponse.response]);
+    } catch (error) {
+    } finally {
+      setLoading(false);
+    }
+  };
   //! To get Event id
   const getId2 = async () => {
-    raw = JSON.stringify(eventsDetail);
-
+    const raw = JSON.stringify(eventsDetail);
+    const requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+    };
     let res = await postData(
-      "https://gemini-ai-hackathon-efa-backend.onrender.com/users/",
+      "https://gemini-ai-hackathon-efa-backend.onrender.com/organizers/events/new",
       requestOptions
     );
+
     let id = JSON.parse(res);
-    localStorage.setItem("id2", id.id);
+    localStorage.setItem("id2", id.eventId);
     mainPrompt();
   };
 
@@ -142,7 +166,9 @@ export default function Home() {
           ? 1
           : 2;
 
-      setPromptsArr([...promptsArr, promptsArray[particularPrompt]]);
+      setTimeout(() => {
+        setPromptsArr([...promptsArr, promptsArray[particularPrompt]]);
+      }, 1000);
     } else {
       mainPrompt();
       return;
@@ -269,10 +295,10 @@ export default function Home() {
                                 alignItems: "center",
                               }}
                             >
-                              <img
+                              <Image
                                 src={AiProfile}
                                 className="rounded-circle mb-auto me-2"
-                                style={profileStyle}
+                                style={profileUserStyle}
                                 alt=""
                               />
                               <div className="col-9 me-auto shadow-none p-3 mb-5 bg-body-tertiary rounded">
@@ -365,28 +391,8 @@ export default function Home() {
   );
 }
 
-const iconStyles = {
-  fontSize: "2em",
-  lineHeight: "1em",
-  position: "absolute",
-  top: "50%",
-  zIndex: 3,
-  transition: "transform 0.3s ease" /* Add transition for smoother animation */,
-};
-
-const textStyle = {
-  fontFamily: '"Roboto", sans-serif',
-  fontWeight: 700,
-};
-
-const profileStyle = {
-  width: "3%",
-  padding: "7px",
-  backgroundColor: "rgb(0, 118, 195)",
-};
 const profileUserStyle = {
   width: "4.5%",
   padding: "7px",
   marginTop: "-5px",
 };
-const btn = {};
