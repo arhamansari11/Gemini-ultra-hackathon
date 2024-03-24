@@ -153,3 +153,17 @@ input {
     transform: rotate(360deg);
   }
 }
+
+.dashboard {
+  display: flex;
+}
+
+.total-box {
+  /* flex: 1; */
+  width: 330px;
+  margin: 10px;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: white;
+}

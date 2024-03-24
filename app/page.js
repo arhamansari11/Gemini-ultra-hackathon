@@ -45,7 +45,7 @@ export default function Home() {
     let id2 = localStorage.getItem("id2");
 
     if (id1 === null) {
-      setPromptsArr([...promptsArr, prompt]);
+      setPromptsArr([...promptsArr, { text: prompt, role: "user" }]);
       setPrompt("");
 
       try {
@@ -53,6 +53,7 @@ export default function Home() {
         const raw = JSON.stringify({
           username: prompt,
         });
+
         const requestOptions = {
           method: "POST",
           headers: myHeaders,
@@ -73,7 +74,7 @@ export default function Home() {
         setLoading(false);
       }
     } else if (id1 !== null && id2 === null) {
-      setPromptsArr([...promptsArr, prompt]);
+      setPromptsArr([...promptsArr, { text: prompt, role: "user" }]);
 
       if (eventsDetail.eventName === "") {
         eventsDetail.eventName = prompt;
@@ -90,10 +91,13 @@ export default function Home() {
       setRerender((prevState) => !prevState);
       setPrompt("");
     } else {
+      setPromptsArr([...promptsArr, { text: prompt, role: "user" }]);
+      setPrompt("");
       mainPrompt();
+      return;
     }
   };
-
+  console.log(promptsArr);
   //!For prompting
   const mainPrompt = async () => {
     const raw = JSON.stringify({ prompt: prompt });
@@ -107,8 +111,6 @@ export default function Home() {
     let id2 = localStorage.getItem("id2");
 
     try {
-      setPromptsArr([...promptsArr, prompt]);
-      setPrompt("");
       setLoading(true);
       let res = await postData(
         `https://gemini-ai-hackathon-efa-backend.onrender.com/organizers/${id1}/events/${id2}/conversate`,
@@ -116,8 +118,10 @@ export default function Home() {
       );
 
       let promptResponse = JSON.parse(res);
-
-      setPromptsArr([...promptsArr, promptResponse.response]);
+      setPromptsArr([
+        ...promptsArr,
+        { text: promptResponse.response, role: "ai" },
+      ]);
     } catch (error) {
     } finally {
       setLoading(false);
@@ -148,7 +152,7 @@ export default function Home() {
     let id2 = localStorage.getItem("id2");
 
     if (id1 === null) {
-      setPromptsArr([...promptsArr, "Enter Your Name"]);
+      setPromptsArr([...promptsArr, { text: "Enter Your Name", role: "ai" }]);
     } else if (id1 != null && id2 === null) {
       if (
         eventsDetail.eventName !== "" &&
@@ -167,11 +171,11 @@ export default function Home() {
           : 2;
 
       setTimeout(() => {
-        setPromptsArr([...promptsArr, promptsArray[particularPrompt]]);
+        setPromptsArr([
+          ...promptsArr,
+          { text: promptsArray[particularPrompt], role: "ai" },
+        ]);
       }, 1000);
-    } else {
-      mainPrompt();
-      return;
     }
   }, [reRender]);
 
@@ -266,7 +270,7 @@ export default function Home() {
                     <div className="container-fluid">
                       {promptsArr.map((prom, index) => (
                         <div key={index}>
-                          {index % 2 != 0 ? (
+                          {prom.role == "user" ? (
                             <div
                               className="row p-0 m-0 "
                               style={{
@@ -282,7 +286,7 @@ export default function Home() {
                                 alt=""
                               />
                               <div className="col-9 shadow p-3 mb-5 bg-body-tertiary rounded ">
-                                {prom}
+                                {prom.text}
                               </div>
                               <div className="col-3"></div>
                             </div>
@@ -302,7 +306,7 @@ export default function Home() {
                                 alt=""
                               />
                               <div className="col-9 me-auto shadow-none p-3 mb-5 bg-body-tertiary rounded">
-                                {prom}
+                                {prom.text}
                               </div>
                               <div className="col-3"></div>
                             </div>
