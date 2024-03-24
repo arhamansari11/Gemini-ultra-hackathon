@@ -318,9 +318,10 @@ export default function Home() {
                             alignItems: "center",
                           }}
                         >
-                          <img
+                          <Image
+                            src={AiProfile}
                             className="rounded-circle mb-auto me-2"
-                            style={profileStyle}
+                            style={profileUserStyle}
                             alt=""
                           />
                           <div
@@ -391,6 +392,11 @@ export default function Home() {
   );
 }
 
+const profileStyle = {
+  width: "3%",
+  padding: "7px",
+  backgroundColor: "rgb(0, 118, 195)",
+};
 const profileUserStyle = {
   width: "4.5%",
   padding: "7px",
