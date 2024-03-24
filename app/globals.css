@@ -192,3 +192,7 @@ ul li a:hover {
   transition: 0.3s ease-in;
   color: #1aafdd;
 }
+
+.active {
+  color: #1aafdd;
+}
