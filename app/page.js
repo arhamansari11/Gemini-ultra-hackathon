@@ -91,15 +91,21 @@ export default function Home() {
       setRerender((prevState) => !prevState);
       setPrompt("");
     } else {
-      setPromptsArr([...promptsArr, { text: prompt, role: "user" }]);
-      setPrompt("");
       mainPrompt();
-      return;
     }
   };
+
   console.log(promptsArr);
   //!For prompting
   const mainPrompt = async () => {
+    const userPrompt = { text: prompt, role: "user" };
+
+    // Add user's prompt to the state
+    setPromptsArr([...promptsArr, userPrompt]);
+
+    // Clear the prompt input
+    setPrompt("");
+
     const raw = JSON.stringify({ prompt: prompt });
     const requestOptions = {
       method: "POST",
@@ -264,7 +270,7 @@ export default function Home() {
               >
                 <div className="scroll-inner">
                   <div
-                    className="row prompts px-5 pt-4"
+                    className="row prompts px-sm-5 pt-4"
                     style={{ backgroundColor: "#0D1728", height: "70%" }}
                   >
                     <div className="container-fluid">
@@ -343,7 +349,7 @@ export default function Home() {
                               wrapperClass=""
                             />
                           </div>
-                          <div className="col-3"></div>
+                          <div className="col-sm-3"></div>
                         </div>
                       )}
                     </div>
@@ -396,13 +402,8 @@ export default function Home() {
   );
 }
 
-const profileStyle = {
-  width: "3%",
-  padding: "7px",
-  backgroundColor: "rgb(0, 118, 195)",
-};
 const profileUserStyle = {
-  width: "4.5%",
+  width: "60px",
   padding: "7px",
   marginTop: "-5px",
 };
