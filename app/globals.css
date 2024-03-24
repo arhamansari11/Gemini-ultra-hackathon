@@ -167,3 +167,28 @@ input {
   border-radius: 5px;
   background-color: white;
 }
+
+header {
+  background-color: #0d1728;
+  position: sticky;
+  top: 0px;
+  z-index: 10;
+}
+
+#logo p {
+  font-size: 1.5rem;
+  color: white;
+}
+ul li {
+  list-style: none;
+}
+ul li a {
+  text-decoration: none;
+  color: white;
+  font-family: "Poppins";
+  font-size: 1.5rem;
+}
+ul li a:hover {
+  transition: 0.3s ease-in;
+  color: #1aafdd;
+}

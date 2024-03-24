@@ -19,7 +19,7 @@ function page() {
     <>
       <div
         className="container-fluid d-flex justify-content-center align-items-center "
-        style={{ backgroundColor: "#2F3135", height: "94.1vh" }}
+        style={{ backgroundColor: "#2F3135", height: "94.5vh" }}
       >
         <div
           className="col-lg-6 col-md-6 col-sm-8  p-5 rounded "

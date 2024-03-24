@@ -1,59 +1,24 @@
 "use client";
+import React from "react";
 import Link from "next/link";
-
 const Navbar = () => {
   return (
-    <div className="col-12">
-      <nav class="navbar navbar-expand-lg bg-body-tertiary">
-        <div class="container-fluid">
-          <a
-            class="navbar-brand"
-            href="#"
-            style={{
-              fontFamily: "Times New Roman, Times, serif",
-            }}
-          >
-            <Link href="/" style={{ textDecoration: "none", color: "black" }}>
-              Efa (EVENT FEEDBACK ANALYSIS)
-            </Link>
-          </a>
-
-          <button
-            class="navbar-toggler"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-          >
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-              <li class="nav-item">
-                <Link aria-current="page" href="/">
-                  Chat
-                </Link>
-              </li>
-              <li class="nav-item">
-                <Link
-                  href="/"
-                  style={{ textDecoration: "none", color: "black" }}
-                >
-                  DashBoard
-                </Link>
-              </li>
-              <li class="nav-item">
-                <Link href="/qrcode" style={{ textDecoration: "none" }}>
-                  QrCode
-                </Link>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </nav>
-    </div>
+    <header className="container-fluid d-flex flex-column flex-md-row justify-content-md-around py-2">
+      <div id="logo" className="text-center">
+        <p className=" my-auto">Hello</p>
+      </div>
+      <ul className=" d-flex my-auto mx-auto">
+        <li className=" my-auto">
+          <Link href="/">Chat</Link>
+        </li>
+        <li className="my-auto mx-4 mx-sm-4 mx-md-4 px-md-4 mx-lg-5 px-lg-5">
+          <Link href="dashboard">Dashboard</Link>
+        </li>
+        <li className="my-auto">
+          <Link href="/qrcode">QrCode</Link>
+        </li>
+      </ul>
+    </header>
   );
 };
 
