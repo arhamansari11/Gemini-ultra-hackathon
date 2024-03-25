@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect, useMemo } from "react";
 import Button from 'react-bootstrap/Button';
+import { QRCodeSVG } from "qrcode.react";
 import { ThreeDots } from "react-loader-spinner";
 import Spinner from "../components/loader/spinner";
 import Image from "next/image";
@@ -13,9 +14,8 @@ myHeaders.append("Content-Type", "application/json");
 
 const serverURL = process.env.NEXT_PUBLIC_SERVER_URL;
 
-
 const promptsArray = [
-  "Enter Your Name",
+  "Enter Your name",
   "Enter your event name",
   "Enter your event description",
   "Enter Your event goal",
@@ -75,6 +75,7 @@ const getEventID = async (newEventDetail) => {
 export default function Home() {
   const [id1, setId1] = useState("");
   const [id2, setId2] = useState("");
+  const [generatedQuestion, setGeneratedQuestion] = useState([])
   const [loading, setLoading] = useState(false);
   const [eventsPrompt, setEventsPrompt] = useState(promptsArray.map(item => ({
     question: item,
@@ -87,6 +88,7 @@ export default function Home() {
   const lastPrompt = useMemo(() => promptsArr[promptsArr.length - 1], [promptsArr]);
   // Check to ensure that all details need for the event has been filled
   const eventDetailsComplete = useMemo(() => !eventsPrompt.find(item => !item.answer.length), [eventsPrompt]);
+  const completedInfo = useMemo(() => id1.length && id2.length && eventDetailsComplete, [id1.length, id2.length, eventDetailsComplete])
 
   const handleKeyPress = (event) => {
     if (event.key === "Enter") {
@@ -121,11 +123,15 @@ export default function Home() {
     }
   };
 
-  console.log('this is the serverURL', serverURL);
-
   //!For prompting
-  const mainPrompt = async () => {
-    const userPrompt = { text: prompt, role: "user" };
+  const mainPrompt = async (textPrompt) => {
+    const userPrompt = { text: textPrompt || prompt, role: "user" };
+
+    if (textPrompt) {
+      setPromptsArr(prevSt => [...prevSt, {
+        text: "Creating events with given details", role: "ai"
+      }]);
+    }
 
     // Add user's prompt to the state
     setPromptsArr((prevState) => {
@@ -151,11 +157,16 @@ export default function Home() {
       );
 
       let promptResponse = JSON.parse(res);
-      console.log(promptResponse);
-
-      setPromptsArr((prevState) => {
-        return [...prevState, { text: promptResponse.response, role: "ai" }];
-      });
+      if (textPrompt) {
+        setGeneratedQuestion(promptResponse.response.split("\n"));
+        setPromptsArr((prevState) => {
+          return [...prevState, { text: "These are the question to get Sentimental Analysis", role: "ai" }];
+        });
+      } else {
+        setPromptsArr((prevState) => {
+          return [...prevState, { text: promptResponse.response, role: "ai" }];
+        });
+      }
     } catch (error) {
     } finally {
       setLoading(false);
@@ -178,23 +189,31 @@ export default function Home() {
     }
   }
 
-  const handleGetIDFromStorage = () => {
-    let id1 = localStorage.getItem("id1");
-    let id2 = localStorage.getItem("id2");
-    if (id1?.length) {
-      setId1(id1);
-    }
-    if (id2?.length) {
-      setId2(id2)
-    }
-  }
+  // const handleGetIDFromStorage = () => {
+  //   let id1 = localStorage.getItem("id1");
+  //   let id2 = localStorage.getItem("id2");
+  //   if (id1?.length) {
+  //     setId1(id1);
+  //   }
+  //   if (id2?.length) {
+  //     setId2(id2)
+  //   }
+  // }
 
+  // useEffect(() => {
+  //   if (id1?.length) {
+  //     localStorage.setItem("id1", id1);
+  //   }
+  //   if (id2?.length) {
+  //     localStorage.setItem("id2", id2);
+  //   }
+  // }, [id1, id2]);
 
-  // 1.
-  useEffect(() => {
-    // You need to get the ID from the localstorage first.
-    handleGetIDFromStorage()
-  }, []);
+  // // 1.
+  // useEffect(() => {
+  //   // You need to get the ID from the localstorage first.
+  //   handleGetIDFromStorage()
+  // }, []);
 
   // 2.
   useEffect(() => {
@@ -210,7 +229,7 @@ export default function Home() {
       setPromptsArr(prevSt => [...prevSt, {
         text: "Creating a new user for event", role: "ai"
       }]);
-      getUserID(eventsPrompt.find(item => item.question === "Enter Your Name").answer)
+      getUserID(eventsPrompt.find(item => item.question === "Enter Your name").answer)
         .then(id => {
           setId1(id.id)
         }).catch(err => {
@@ -241,17 +260,6 @@ export default function Home() {
     }
   }, [eventDetailsComplete, eventsPrompt, id2])
 
-  useEffect(() => {
-    if (id1?.length) {
-      localStorage.setItem("id1", id1);
-    }
-    if (id2?.length) {
-      localStorage.setItem("id2", id2);
-    }
-  }, [id1, id2]);
-
-  console.log('this is the error', error)
-
   return (
     <div
       id="productOptimization"
@@ -280,7 +288,7 @@ export default function Home() {
               flexDirection: "column",
               border: "1px solid white",
               borderRadius: "25px",
-              // overflow: 'hidden'
+              overflow: "hidden"
             }}
           >
             <div
@@ -383,7 +391,7 @@ export default function Home() {
                                   alt=""
                                 />
                                 <div className="col-9 shadow p-3 mb-5 bg-body-tertiary rounded ">
-                                  {prom.text}
+                                  <p>{prom.text}</p>
                                 </div>
                                 <div className="col-3"></div>
                               </div>
@@ -410,6 +418,7 @@ export default function Home() {
                             )}
                           </div>
                         ))}
+                        {/* Show the loading feature */}
                         {loading && (
                           <div
                             className="row"
@@ -443,6 +452,23 @@ export default function Home() {
                             <div className="col-sm-3"></div>
                           </div>
                         )}
+                        {/* Show the generate question */}
+                        {
+                          generatedQuestion.length ?
+                            <div style={{display: "flex",}}>
+                              {
+                                generatedQuestion.map((item, idx) =>
+                                  <Button variant="outline-info" key={idx}
+                                    style={{
+                                      marginRight: "4px",
+                                      padding: "8px"
+                                    }}
+                                  >
+                                    {item}
+                                  </Button>)
+                              }
+                            </div> : <></>
+                        }
                       </div>
                     </div>
                   </div>
@@ -452,37 +478,61 @@ export default function Home() {
               className="row"
               style={{
                 backgroundColor: "#090F1A",
-                height: "8%",
+                height: !completedInfo && "8%",
                 borderBottomLeftRadius: "25px",
                 borderBottomRightRadius: "25px",
               }}
             >
-              <div className="input-group">
-                <input
-                  value={prompt}
-                  style={{
-                    backgroundColor: "#090F1A",
-                    border: "none",
-                    color: "white",
-                  }}
-                  onChange={(e) => setPrompt(e.target.value)}
-                  type="text"
-                  className="form-control"
-                  placeholder="Type message here..."
-                  aria-label="Username"
-                  aria-describedby="basic-addon1"
-                  onKeyDown={handleKeyPress}
-                />
+              {
+                completedInfo ?
+                  <div style={{
+                    height: '200px',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    flexDirection: 'column',
+                    padding: 8,
+                    color: 'whitesmoke'
+                  }}>
+                    <QRCodeSVG height={200} width={200} value={`${serverURL}event/${id2}`} />
+                    <p>You can share this event feedback form via</p>
+                    <p>
+                      {`${serverURL}event/${id2}`}
+                    </p>
+                  </div> : <></>
+              }
+              {
+                eventDetailsComplete ?
+                  <Button variant="primary" disabled={generatedQuestion.length || loading}
+                    onClick={() => mainPrompt("Please Generate Question")}>
+                    Generate Question
+                  </Button> :
+                  <div className="input-group" style={{ padding: 0 }}>
+                    <input
+                      value={prompt}
+                      style={{
+                        backgroundColor: "#090F1A",
+                        border: "none",
+                        color: "white",
+                      }}
+                      onChange={(e) => setPrompt(e.target.value)}
+                      type="text"
+                      className="form-control"
+                      placeholder="Type message here..."
+                      aria-label="Username"
+                      aria-describedby="basic-addon1"
+                      onKeyDown={handleKeyPress}
+                    />
 
-                <Button
-                  variant="primary"
-                  onClick={id1?.length && id2?.length ? mainPrompt : handleSubmit}
-                  disabled={loading}
-                >
-                  {loading ? <Spinner /> : "Send"}
-                </Button>
-              </div>
-
+                    <Button
+                      variant="primary"
+                      onClick={handleSubmit}
+                      disabled={loading || !prompt.length}
+                    >
+                      {loading ? <Spinner /> : "Send"}
+                    </Button>
+                  </div>
+              }
               {error && <p className="text-danger">{error.message}</p>}
             </div>
           </div>
