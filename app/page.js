@@ -7,9 +7,9 @@ import Image from "next/image";
 import AiProfile from "../Assets/images/aiLogo.png";
 import userProfile from "../Assets/images/user.jpg";
 
- //! Blue print for api
- const myHeaders = new Headers();
- myHeaders.append("Content-Type", "application/json");
+//! Blue print for api
+const myHeaders = new Headers();
+myHeaders.append("Content-Type", "application/json");
 
 
 const promptsArray = [
@@ -115,7 +115,7 @@ export default function Home() {
     if (!eventDetailsComplete) {
       handleUpdateEventDetails()
     } else {
-      // Pass in the user username
+      mainPrompt();
     }
   };
 
@@ -142,7 +142,7 @@ export default function Home() {
     try {
       setLoading(true);
       let res = await postData(
-        `https://gemini-ai-hackathon-efa-backend.onrender.com/organizers/${id1}/events/${id2}/conversate`,
+        `http://localhost:3040/organizers/${id1}/events/${id2}/conversate`,
         requestOptions
       );
 
@@ -177,8 +177,12 @@ export default function Home() {
   const handleGetIDFromStorage = () => {
     let id1 = localStorage.getItem("id1");
     let id2 = localStorage.getItem("id2");
-    setId1(id1);
-    setId2(id2)
+    if (id1?.length) {
+      setId1(id1);
+    }
+    if (id2?.length) {
+      setId2(id2)
+    }
   }
 
 
@@ -197,7 +201,7 @@ export default function Home() {
   }, [id1, id2, lastPrompt])
 
   useEffect(() => {
-    if (eventDetailsComplete && !id1.length) {
+    if (eventDetailsComplete && !id1?.length) {
       setLoading(true);
       setPromptsArr(prevSt => [...prevSt, {
         text: "Creating a new user for event", role: "ai"
@@ -211,7 +215,7 @@ export default function Home() {
           setLoading(false)
         })
     }
-  }, [eventDetailsComplete, eventsPrompt, id1.length])
+  }, [eventDetailsComplete, eventsPrompt, id1?.length])
 
   useEffect(() => {
     if (eventDetailsComplete && !id2.length) {
@@ -231,13 +235,13 @@ export default function Home() {
         setLoading(false)
       })
     }
-  }, [eventDetailsComplete, eventsPrompt, id2.length])
+  }, [eventDetailsComplete, eventsPrompt, id2])
 
   useEffect(() => {
-    if(id1.length){
+    if (id1?.length) {
       localStorage.setItem("id1", id1);
     }
-    if(id2.length){
+    if (id2?.length) {
       localStorage.setItem("id2", id2);
     }
   }, [id1, id2]);
@@ -440,47 +444,43 @@ export default function Home() {
                   </div>
                 </div>
               )}
-              {
-                id1.length && id2.length ?
-                <Button variant="primary">Generate Questions</Button> :
-                <div
-                  className="row"
+            <div
+              className="row"
+              style={{
+                backgroundColor: "#090F1A",
+                height: "8%",
+                borderBottomLeftRadius: "25px",
+                borderBottomRightRadius: "25px",
+              }}
+            >
+              <div className="input-group">
+                <input
+                  value={prompt}
                   style={{
                     backgroundColor: "#090F1A",
-                    height: "8%",
-                    borderBottomLeftRadius: "25px",
-                    borderBottomRightRadius: "25px",
+                    border: "none",
+                    color: "white",
                   }}
+                  onChange={(e) => setPrompt(e.target.value)}
+                  type="text"
+                  className="form-control"
+                  placeholder="Type message here..."
+                  aria-label="Username"
+                  aria-describedby="basic-addon1"
+                  onKeyDown={handleKeyPress}
+                />
+
+                <Button
+                  variant="primary"
+                  onClick={id1?.length && id2?.length ? mainPrompt : handleSubmit}
+                  disabled={loading}
                 >
-                  <div className="input-group">
-                    <input
-                      value={prompt}
-                      style={{
-                        backgroundColor: "#090F1A",
-                        border: "none",
-                        color: "white",
-                      }}
-                      onChange={(e) => setPrompt(e.target.value)}
-                      type="text"
-                      className="form-control"
-                      placeholder="Type message here..."
-                      aria-label="Username"
-                      aria-describedby="basic-addon1"
-                      onKeyDown={handleKeyPress}
-                    />
+                  {loading ? <Spinner /> : "Send"}
+                </Button>
+              </div>
 
-                    <Button
-                      variant="primary"
-                      onClick={handleSubmit}
-                      disabled={loading}
-                    >
-                      {loading ? <Spinner /> : "Send"}
-                    </Button>
-                  </div>
-
-                  {error && <p className="text-danger">{error.message}</p>}
-                </div>
-              }
+              {error && <p className="text-danger">{error.message}</p>}
+            </div>
           </div>
         </div>
       </main>
