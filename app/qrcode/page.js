@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import QRCode from "qrcode.react";
 
-function page() {
+function Page() {
   const [text, setText] = useState("");
   const [generated, setGenerated] = useState(false);
 
@@ -51,4 +51,4 @@ function page() {
   );
 }
 
-export default page;
+export default Page;

@@ -1,101 +1,124 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
+import Button from 'react-bootstrap/Button';
 import { ThreeDots } from "react-loader-spinner";
 import Spinner from "../components/loader/spinner";
 import Image from "next/image";
 import AiProfile from "../Assets/images/aiLogo.png";
 import userProfile from "../Assets/images/user.jpg";
 
+ //! Blue print for api
+ const myHeaders = new Headers();
+ myHeaders.append("Content-Type", "application/json");
+
+
 const promptsArray = [
+  "Enter Your Name",
   "Enter your event name",
   "Enter your event description",
   "Enter Your event goal",
 ];
 
-const eventsDetail = {
-  eventName: "",
-  eventDescription: "",
-  formGoal: "",
+async function postData(url, options) {
+  try {
+    const response = await fetch(url, options);
+    const result = await response.text();
+    return result;
+  } catch (error) {
+    return error;
+  }
+}
+
+const getUserID = async (username) => {
+  try {
+    let res = await postData(
+      "http://localhost:3040/users/",
+      {
+        method: "POST",
+        headers: myHeaders,
+        body: JSON.stringify({
+          username: username,
+        }),
+        redirect: "follow",
+      }
+    );
+    let id = JSON.parse(res);
+    return id;
+  } catch (err) {
+    throw err;
+  }
+}
+
+//! To get Event id
+const getEventID = async (newEventDetail) => {
+  try {
+    let res = await postData(
+      "http://localhost:3040/organizers/events/new",
+      {
+        method: "POST",
+        headers: myHeaders,
+        body: JSON.stringify(newEventDetail),
+        redirect: "follow",
+      }
+    );
+
+    let id = JSON.parse(res);
+    return id;
+  } catch (error) {
+    throw error;
+  }
 };
 
+
 export default function Home() {
+  const [id1, setId1] = useState("");
+  const [id2, setId2] = useState("");
   const [loading, setLoading] = useState(false);
+  const [eventsPrompt, setEventsPrompt] = useState(promptsArray.map(item => ({
+    question: item,
+    answer: ''
+  })));
   const [prompt, setPrompt] = useState("");
   const [promptsArr, setPromptsArr] = useState([]);
-  const [reRender, setRerender] = useState(false);
   const [error, setError] = useState("");
-  //! Blue print for api
-  const myHeaders = new Headers();
-  myHeaders.append("Content-Type", "application/json");
 
-  async function postData(url, options) {
-    try {
-      const response = await fetch(url, options);
-      const result = await response.text();
-      return result;
-    } catch (error) {
-      return error;
-    }
-  }
+  const lastPrompt = useMemo(() => promptsArr[promptsArr.length - 1], [promptsArr]);
+  // Check to ensure that all details need for the event has been filled
+  const eventDetailsComplete = useMemo(() => !eventsPrompt.find(item => !item.answer.length), [eventsPrompt]);
 
-  //! Submit Handler
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    let id1 = localStorage.getItem("id1");
-    let id2 = localStorage.getItem("id2");
-
-    if (id1 === null) {
-      setPromptsArr([...promptsArr, { text: prompt, role: "user" }]);
-      setPrompt("");
-
-      try {
-        setLoading(true);
-        const raw = JSON.stringify({
-          username: prompt,
-        });
-
-        const requestOptions = {
-          method: "POST",
-          headers: myHeaders,
-          body: raw,
-          redirect: "follow",
-        };
-
-        let res = await postData(
-          "https://gemini-ai-hackathon-efa-backend.onrender.com/users/",
-          requestOptions
-        );
-        let id = JSON.parse(res);
-        localStorage.setItem("id1", id.id);
-        setRerender((prevState) => !prevState);
-      } catch (error) {
-        setError(error);
-      } finally {
-        setLoading(false);
-      }
-    } else if (id1 !== null && id2 === null) {
-      setPromptsArr([...promptsArr, { text: prompt, role: "user" }]);
-
-      if (eventsDetail.eventName === "") {
-        eventsDetail.eventName = prompt;
-      } else if (
-        eventsDetail.eventName !== "" &&
-        eventsDetail.eventDescription === "" &&
-        eventsDetail.formGoal === ""
-      ) {
-        eventsDetail.eventDescription = prompt;
-      } else {
-        eventsDetail.formGoal = prompt;
-      }
-
-      setRerender((prevState) => !prevState);
-      setPrompt("");
-    } else {
-      mainPrompt();
+  const handleKeyPress = (event) => {
+    if (event.key === "Enter") {
+      handleSubmit(event);
     }
   };
 
-  console.log(promptsArr);
+  const handleUpdateEventDetails = () => {
+    console.log({ lastPrompt })
+    const foundEventPromptIdx = eventsPrompt.findIndex(item => item.question === lastPrompt.text);
+    console.log(foundEventPromptIdx)
+    if (foundEventPromptIdx === -1) return
+    const newEventPrompt = [...eventsPrompt];
+    newEventPrompt.splice(foundEventPromptIdx, 1, {
+      question: eventsPrompt[foundEventPromptIdx].question,
+      answer: prompt
+    })
+    const newPromptArr = [...promptsArr, { text: prompt, role: "user" }]
+    setEventsPrompt(newEventPrompt);
+    setPromptsArr(newPromptArr);
+    setPrompt("")
+    console.log('this is the new Event', newEventPrompt, promptsArr);
+  }
+  //! Submit Handler
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!eventDetailsComplete) {
+      handleUpdateEventDetails()
+    } else {
+      // Pass in the user username
+    }
+  };
+
   //!For prompting
   const mainPrompt = async () => {
     const userPrompt = { text: prompt, role: "user" };
@@ -115,8 +138,6 @@ export default function Home() {
       body: raw,
       redirect: "follow",
     };
-    let id1 = localStorage.getItem("id1");
-    let id2 = localStorage.getItem("id2");
 
     try {
       setLoading(true);
@@ -136,57 +157,92 @@ export default function Home() {
       setLoading(false);
     }
   };
-  //! To get Event id
-  const getId2 = async () => {
-    const raw = JSON.stringify(eventsDetail);
-    const requestOptions = {
-      method: "POST",
-      headers: myHeaders,
-      body: raw,
-      redirect: "follow",
-    };
-    let res = await postData(
-      "https://gemini-ai-hackathon-efa-backend.onrender.com/organizers/events/new",
-      requestOptions
-    );
 
-    let id = JSON.parse(res);
-    localStorage.setItem("id2", id.eventId);
-    mainPrompt();
-  };
-
-  //! Rerender the page
-  useEffect(() => {
-    let id1 = localStorage.getItem("id1");
-    let id2 = localStorage.getItem("id2");
-
-    if (id1 === null) {
-      setPromptsArr([...promptsArr, { text: "Enter Your Name", role: "ai" }]);
-    } else if (id1 != null && id2 === null) {
-      if (
-        eventsDetail.eventName !== "" &&
-        eventsDetail.eventDescription !== "" &&
-        eventsDetail.formGoal !== ""
-      ) {
-        getId2();
-        return;
-      }
-
-      let particularPrompt =
-        eventsDetail.eventName == ""
-          ? 0
-          : eventsDetail.eventDescription == ""
-          ? 1
-          : 2;
-
+  const handleSetPrompt = (newPromptArr = promptsArr, newEventPrompt = eventsPrompt) => {
+    // If a userID exist, but event details is not complete, ask the user to fill the detail
+    if (!eventDetailsComplete) {
+      const foundLatestEventPrompt = newEventPrompt.find(item => !item.answer.length);
       setTimeout(() => {
         setPromptsArr([
-          ...promptsArr,
-          { text: promptsArray[particularPrompt], role: "ai" },
+          ...newPromptArr,
+          {
+            text: foundLatestEventPrompt.question, role: "ai"
+          }
         ]);
-      }, 1000);
+      }, 1500);
+      // If the userID exist and the event detail is complete, but there is no event ID yet, GET ONE
     }
-  }, [reRender]);
+  }
+
+  const handleGetIDFromStorage = () => {
+    let id1 = localStorage.getItem("id1");
+    let id2 = localStorage.getItem("id2");
+    setId1(id1);
+    setId2(id2)
+  }
+
+
+  // 1.
+  useEffect(() => {
+    // You need to get the ID from the localstorage first.
+    handleGetIDFromStorage()
+  }, []);
+
+  // 2.
+  useEffect(() => {
+    // Set you PROMPT based on ID value
+    // If the last response was from AI, wait
+    if (lastPrompt?.role == "ai") return;
+    handleSetPrompt()
+  }, [id1, id2, lastPrompt])
+
+  useEffect(() => {
+    if (eventDetailsComplete && !id1.length) {
+      setLoading(true);
+      setPromptsArr(prevSt => [...prevSt, {
+        text: "Creating a new user for event", role: "ai"
+      }]);
+      getUserID(eventsPrompt.find(item => item.question === "Enter Your Name").answer)
+        .then(id => {
+          setId1(id.id)
+        }).catch(err => {
+          setError(err)
+        }).finally(() => {
+          setLoading(false)
+        })
+    }
+  }, [eventDetailsComplete, eventsPrompt, id1.length])
+
+  useEffect(() => {
+    if (eventDetailsComplete && !id2.length) {
+      setLoading(true);
+      setPromptsArr(prevSt => [...prevSt, {
+        text: "Creating events with given details", role: "ai"
+      }]);
+      getEventID({
+        eventName: eventsPrompt.find(item => item.question === "Enter your event name").answer,
+        eventDescription: eventsPrompt.find(item => item.question === "Enter your event description").answer,
+        formGoal: eventsPrompt.find(item => item.question === "Enter Your event goal").answer,
+      }).then(id => {
+        setId2(id.eventId)
+      }).catch(err => {
+        setError(err)
+      }).finally(() => {
+        setLoading(false)
+      })
+    }
+  }, [eventDetailsComplete, eventsPrompt, id2.length])
+
+  useEffect(() => {
+    if(id1.length){
+      localStorage.setItem("id1", id1);
+    }
+    if(id2.length){
+      localStorage.setItem("id2", id2);
+    }
+  }, [id1, id2]);
+
+  console.log('this is the error', error)
 
   return (
     <div
@@ -216,6 +272,7 @@ export default function Home() {
               flexDirection: "column",
               border: "1px solid white",
               borderRadius: "25px",
+              // overflow: 'hidden'
             }}
           >
             <div
@@ -240,7 +297,7 @@ export default function Home() {
               </div>
             </div>
 
-            {promptsArr.length === 0 && (
+            {promptsArr.length === 0 ? (
               <div
                 className="row"
                 style={{ backgroundColor: "#0D1728", height: "78%" }}
@@ -269,143 +326,161 @@ export default function Home() {
                     for attendees and challenging for event organizers to manage
                     effectively at scale.
                   </p>
-                </div>
-              </div>
-            )}
-
-            {/* show prompts */}
-            {promptsArr.length !== 0 && (
-              <div
-                className="prompt-scroll-box row d-flex justify-content-center"
-                style={{ backgroundColor: "#0D1728", height: "78%" }}
-              >
-                <div className="scroll-inner">
-                  <div
-                    className="row prompts px-sm-5 pt-4"
-                    style={{ backgroundColor: "#0D1728", height: "70%" }}
-                  >
-                    <div className="container-fluid">
-                      {promptsArr.map((prom, index) => (
-                        <div key={index}>
-                          {prom.role == "user" ? (
-                            <div
-                              className="row p-0 m-0 "
-                              style={{
-                                display: "flex",
-                                justifyContent: "center",
-                                alignItems: "center",
-                              }}
-                            >
-                              <Image
-                                src={userProfile}
-                                className="rounded-circle mb-auto ms-auto "
-                                style={profileUserStyle}
-                                alt=""
-                              />
-                              <div className="col-9 shadow p-3 mb-5 bg-body-tertiary rounded ">
-                                {prom.text}
-                              </div>
-                              <div className="col-3"></div>
-                            </div>
-                          ) : (
-                            <div
-                              className="row "
-                              style={{
-                                display: "flex",
-                                justifyContent: "center",
-                                alignItems: "center",
-                              }}
-                            >
-                              <Image
-                                src={AiProfile}
-                                className="rounded-circle mb-auto me-2"
-                                style={profileUserStyle}
-                                alt=""
-                              />
-                              <div className="col-9 me-auto shadow-none p-3 mb-5 bg-body-tertiary rounded">
-                                {prom.text}
-                              </div>
-                              <div className="col-3"></div>
-                            </div>
-                          )}
-                        </div>
-                      ))}
-                      {loading && (
-                        <div
-                          className="row"
+                  <div style={{
+                    display: "flex",
+                    justifyContent: "space-between"
+                  }}>
+                    {
+                      promptsArray.map((item, idx) =>
+                        <Button variant="outline-info" key={idx}
                           style={{
-                            display: "flex",
-                            justifyContent: "center",
-                            alignItems: "center",
+                            marginRight: "4px",
+                            padding: "8px"
                           }}
                         >
-                          <Image
-                            src={AiProfile}
-                            className="rounded-circle mb-auto me-2"
-                            style={profileUserStyle}
-                            alt=""
-                          />
-                          <div
-                            className="col-9 shadow-none me-auto p-3 mb-5 bg-body-tertiary rounded"
-                            style={{ height: "100px" }}
-                          >
-                            <ThreeDots
-                              visible={true}
-                              height="30"
-                              width="30"
-                              color="black"
-                              radius="9"
-                              ariaLabel="three-dots-loading"
-                              wrapperStyle={{}}
-                              wrapperClass=""
-                            />
-                          </div>
-                          <div className="col-sm-3"></div>
-                        </div>
-                      )}
-                    </div>
+                          {item}
+                        </Button>)
+                    }
                   </div>
                 </div>
               </div>
-            )}
-
-            <div
-              className="row"
-              style={{
-                backgroundColor: "#090F1A",
-                height: "8%",
-                borderBottomLeftRadius: "25px",
-                borderBottomRightRadius: "25px",
-              }}
-            >
-              <div className="input-group">
-                <input
-                  value={prompt}
+            )
+              // show prompts
+              : (
+                <div
+                  className="prompt-scroll-box row d-flex justify-content-center"
+                  style={{ backgroundColor: "#0D1728", height: "78%" }}
+                >
+                  <div className="scroll-inner">
+                    <div
+                      className="row prompts px-sm-5 pt-4"
+                      style={{ backgroundColor: "#0D1728", height: "70%" }}
+                    >
+                      <div className="container-fluid">
+                        {promptsArr.map((prom, index) => (
+                          <div key={index}>
+                            {prom.role == "user" ? (
+                              <div
+                                className="row p-0 m-0 "
+                                style={{
+                                  display: "flex",
+                                  justifyContent: "center",
+                                  alignItems: "center",
+                                }}
+                              >
+                                <Image
+                                  src={userProfile}
+                                  className="rounded-circle mb-auto ms-auto "
+                                  style={profileUserStyle}
+                                  alt=""
+                                />
+                                <div className="col-9 shadow p-3 mb-5 bg-body-tertiary rounded ">
+                                  {prom.text}
+                                </div>
+                                <div className="col-3"></div>
+                              </div>
+                            ) : (
+                              <div
+                                className="row"
+                                style={{
+                                  display: "flex",
+                                  justifyContent: "center",
+                                  alignItems: "center",
+                                }}
+                              >
+                                <Image
+                                  src={AiProfile}
+                                  className="rounded-circle mb-auto me-2"
+                                  style={profileUserStyle}
+                                  alt=""
+                                />
+                                <div className="col-9 me-auto shadow-none p-3 mb-5 bg-body-tertiary rounded">
+                                  {prom.text}
+                                </div>
+                                <div className="col-3"></div>
+                              </div>
+                            )}
+                          </div>
+                        ))}
+                        {loading && (
+                          <div
+                            className="row"
+                            style={{
+                              display: "flex",
+                              justifyContent: "center",
+                              alignItems: "center",
+                            }}
+                          >
+                            <Image
+                              src={AiProfile}
+                              className="rounded-circle mb-auto me-2"
+                              style={profileUserStyle}
+                              alt=""
+                            />
+                            <div
+                              className="col-9 shadow-none me-auto p-3 mb-5 bg-body-tertiary rounded"
+                              style={{ height: "100px" }}
+                            >
+                              <ThreeDots
+                                visible={true}
+                                height="30"
+                                width="30"
+                                color="black"
+                                radius="9"
+                                ariaLabel="three-dots-loading"
+                                wrapperStyle={{}}
+                                wrapperClass=""
+                              />
+                            </div>
+                            <div className="col-sm-3"></div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+              {
+                id1.length && id2.length ?
+                <Button variant="primary">Generate Questions</Button> :
+                <div
+                  className="row"
                   style={{
                     backgroundColor: "#090F1A",
-                    border: "none",
-                    color: "white",
+                    height: "8%",
+                    borderBottomLeftRadius: "25px",
+                    borderBottomRightRadius: "25px",
                   }}
-                  onChange={(e) => setPrompt(e.target.value)}
-                  type="text"
-                  className="form-control"
-                  placeholder="Type message here..."
-                  aria-label="Username"
-                  aria-describedby="basic-addon1"
-                />
-
-                <button
-                  onClick={handleSubmit}
-                  className="btn"
-                  disabled={loading}
-                  style={{ backgroundColor: "#0076c3", color: "white" }}
                 >
-                  {loading ? <Spinner /> : "Send"}
-                </button>
-              </div>
+                  <div className="input-group">
+                    <input
+                      value={prompt}
+                      style={{
+                        backgroundColor: "#090F1A",
+                        border: "none",
+                        color: "white",
+                      }}
+                      onChange={(e) => setPrompt(e.target.value)}
+                      type="text"
+                      className="form-control"
+                      placeholder="Type message here..."
+                      aria-label="Username"
+                      aria-describedby="basic-addon1"
+                      onKeyDown={handleKeyPress}
+                    />
 
-              {/* {error && <p className="text-danger">{error}</p>} */}
-            </div>
+                    <Button
+                      variant="primary"
+                      onClick={handleSubmit}
+                      disabled={loading}
+                    >
+                      {loading ? <Spinner /> : "Send"}
+                    </Button>
+                  </div>
+
+                  {error && <p className="text-danger">{error.message}</p>}
+                </div>
+              }
           </div>
         </div>
       </main>
