@@ -1,13 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
-// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-// import {
-//   faUsers,
-//   faMapMarkerAlt,
-//   faCity,
-// } from "@fortawesome/free-solid-svg-icons";
 
-function page() {
+function Page() {
   const [totalUsers, setTotalUsers] = useState(0);
   const [totalAddresses, setTotalAddresses] = useState(0);
   const [totalCities, setTotalCities] = useState(0);
@@ -99,4 +93,4 @@ function page() {
   );
 }
 
-export default page;
+export default Page;
