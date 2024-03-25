@@ -4,8 +4,8 @@ import Button from 'react-bootstrap/Button';
 import { ThreeDots } from "react-loader-spinner";
 import Spinner from "../components/loader/spinner";
 import Image from "next/image";
-import AiProfile from "../Assets/images/aiLogo.png";
-import userProfile from "../Assets/images/user.jpg";
+import AiProfile from "../public/aiLogo.png";
+import userProfile from "../public/user.jpg";
 
 //! Blue print for api
 const myHeaders = new Headers();
