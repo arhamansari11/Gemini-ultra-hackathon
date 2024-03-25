@@ -26,7 +26,9 @@ function Page() {
           style={{ backgroundColor: "#0D1728", border: "1px solid white" }}
         >
           <div className="flex justify-center align-items-center flex-col">
-            <h1 style={{ color: "#0B5ED7" }}>QR Code Generator</h1>
+            <h1 style={{ color: "#0B5ED7" }} className="fs-1">
+              QR Code Generator
+            </h1>
             <input
               type="text"
               value={text}
@@ -35,7 +37,7 @@ function Page() {
               style={{ padding: "10px", margin: "10px", fontSize: "16px" }}
             />
             <br />
-            <button onClick={handleGenerateQR} className="btn btn-primary">
+            <button onClick={handleGenerateQR} className="btn btn-primary ">
               Generate QR Code
             </button>
             <br />

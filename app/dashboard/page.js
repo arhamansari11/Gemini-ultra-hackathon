@@ -39,7 +39,7 @@ function Page() {
   return (
     <div style={{ backgroundColor: "#2F3135", height: "95vh" }}>
       <h1
-        className="d-flex justify-content-center align-items-center pt-8"
+        className="d-flex justify-content-center align-items-center pt-8 fs-1"
         style={{ color: "#0B5ED7" }}
       >
         DashBoard
@@ -52,7 +52,10 @@ function Page() {
                 className="total-box"
                 style={{ backgroundColor: "#0D1728", color: "white" }}
               >
-                <h2 style={{ display: "inline", marginRight: "10px" }}>
+                <h2
+                  style={{ display: "inline", marginRight: "10px" }}
+                  className="fs-2"
+                >
                   Users
                 </h2>
                 {/* <FontAwesomeIcon icon={faUsers} style={{ display: "inline" }} /> */}
@@ -64,7 +67,10 @@ function Page() {
                 className="total-box"
                 style={{ backgroundColor: "#0D1728", color: "white" }}
               >
-                <h2 style={{ display: "inline", marginRight: "10px" }}>
+                <h2
+                  style={{ display: "inline", marginRight: "10px" }}
+                  className="fs-2"
+                >
                   Events
                 </h2>
                 {/* <FontAwesomeIcon
@@ -79,7 +85,10 @@ function Page() {
                 className="total-box"
                 style={{ backgroundColor: "#0D1728", color: "white" }}
               >
-                <h2 style={{ display: "inline", marginRight: "10px" }}>
+                <h2
+                  style={{ display: "inline", marginRight: "10px" }}
+                  className="fs-2"
+                >
                   Cities
                 </h2>
                 {/* <FontAwesomeIcon icon={faCity} style={{ display: "inline" }} /> */}
