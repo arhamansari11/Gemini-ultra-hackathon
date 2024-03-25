@@ -3,13 +3,15 @@ import React, { useState } from "react";
 import QRCode from "qrcode.react";
 
 function Page() {
-  const [text, setText] = useState("");
+  const [text, setText] = useState(
+    "https://gemini-ultra-hackathon-tau.vercel.app/"
+  );
   const [generated, setGenerated] = useState(false);
 
-  const handleChange = (e) => {
-    setText(e.target.value);
-    setGenerated(false); // Reset generated state when text changes
-  };
+  // const handleChange = (e) => {
+  //   setText(e.target.value);
+  //   setGenerated(false); // Reset generated state when text changes
+  // };
 
   const handleGenerateQR = () => {
     setGenerated(true);
@@ -29,13 +31,13 @@ function Page() {
             <h1 style={{ color: "#0B5ED7" }} className="fs-1">
               QR Code Generator
             </h1>
-            <input
+            {/* <input
               type="text"
               value={text}
               onChange={handleChange}
               placeholder="Enter text here"
               style={{ padding: "10px", margin: "10px", fontSize: "16px" }}
-            />
+            /> */}
             <br />
             <button onClick={handleGenerateQR} className="btn btn-primary ">
               Generate QR Code

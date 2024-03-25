@@ -125,7 +125,7 @@ export default function Home() {
       );
 
       let promptResponse = JSON.parse(res);
-
+      console.log(promptResponse);
       setPromptsArr((prevState) => {
         return [...prevState, { text: promptResponse.response, role: "ai" }];
       });
@@ -186,6 +186,7 @@ export default function Home() {
     }
   }, [reRender]);
 
+  console.log(promptsArr);
   return (
     <div
       id="productOptimization"
@@ -320,9 +321,12 @@ export default function Home() {
                                 style={profileUserStyle}
                                 alt=""
                               />
-                              <div className="col-9 me-auto shadow-none p-3 mb-5 bg-body-tertiary rounded">
-                                {prom.text}
-                              </div>
+                              <div
+                                className="col-9 me-auto shadow-none p-3 mb-5 bg-body-tertiary rounded"
+                                dangerouslySetInnerHTML={{
+                                  __html: prom.text.replace(/\n/g, "<br>"),
+                                }}
+                              ></div>
                               <div className="col-3"></div>
                             </div>
                           )}
