@@ -11,6 +11,8 @@ import userProfile from "../Assets/images/user.jpg";
 const myHeaders = new Headers();
 myHeaders.append("Content-Type", "application/json");
 
+const serverURL = process.env.NEXT_PUBLIC_SERVER_URL;
+
 
 const promptsArray = [
   "Enter Your Name",
@@ -32,7 +34,7 @@ async function postData(url, options) {
 const getUserID = async (username) => {
   try {
     let res = await postData(
-      "http://localhost:3040/users/",
+      `${serverURL}users/`,
       {
         method: "POST",
         headers: myHeaders,
@@ -53,7 +55,7 @@ const getUserID = async (username) => {
 const getEventID = async (newEventDetail) => {
   try {
     let res = await postData(
-      "http://localhost:3040/organizers/events/new",
+      `${serverURL}organizers/events/new`,
       {
         method: "POST",
         headers: myHeaders,
@@ -119,6 +121,8 @@ export default function Home() {
     }
   };
 
+  console.log('this is the serverURL', serverURL);
+
   //!For prompting
   const mainPrompt = async () => {
     const userPrompt = { text: prompt, role: "user" };
@@ -142,7 +146,7 @@ export default function Home() {
     try {
       setLoading(true);
       let res = await postData(
-        `http://localhost:3040/organizers/${id1}/events/${id2}/conversate`,
+        `${serverURL}organizers/${id1}/events/${id2}/conversate`,
         requestOptions
       );
 
