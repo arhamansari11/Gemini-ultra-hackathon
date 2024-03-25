@@ -3,8 +3,8 @@ import { useState, useEffect } from "react";
 import { ThreeDots } from "react-loader-spinner";
 import Spinner from "../components/loader/spinner";
 import Image from "next/image";
-import AiProfile from "@/Assets/images/aiLogo.png";
-import userProfile from "@/Assets/images/user.jpg";
+import AiProfile from "@/Assets/aiLogo.png";
+import userProfile from "@/Assets/user.jpg";
 
 const promptsArray = [
   "Enter your event name",
@@ -95,7 +95,6 @@ export default function Home() {
     }
   };
 
-  console.log(promptsArr);
   //!For prompting
   const mainPrompt = async () => {
     const userPrompt = { text: prompt, role: "user" };
@@ -126,7 +125,6 @@ export default function Home() {
       );
 
       let promptResponse = JSON.parse(res);
-      console.log(promptResponse);
 
       setPromptsArr((prevState) => {
         return [...prevState, { text: promptResponse.response, role: "ai" }];
