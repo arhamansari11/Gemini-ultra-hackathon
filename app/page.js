@@ -3,8 +3,8 @@ import { useState, useEffect } from "react";
 import { ThreeDots } from "react-loader-spinner";
 import Spinner from "../components/loader/spinner";
 import Image from "next/image";
-import AiProfile from "../Assets/images/aiLogo.png";
-import userProfile from "../Assets/images/user.jpg";
+import AiProfile from "@/Assets/images/aiLogo.png";
+import userProfile from "@/Assets/images/user.jpg";
 
 const promptsArray = [
   "Enter your event name",
